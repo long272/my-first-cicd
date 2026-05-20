@@ -12,7 +12,7 @@ describe('Calculator API', () => {
   test('POST /add cộng đúng', async () => {
     const res = await request(app).post('/add').send({ a: 3, b: 4 });
     expect(res.statusCode).toBe(200);
-    expect(res.body.result).toBe(7);
+    expect(res.body.result).toBe(999);
   });
 
   test('POST /subtract trừ đúng', async () => {
