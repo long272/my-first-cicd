@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ============================================
 # Tên của workflow — hiển thị trên GitHub
 # ============================================
@@ -88,3 +89,95 @@ jobs:
       - name: Check app starts correctly
         run: |
           node -e "require('./src/app.js'); console.log('App loaded successfully!')"
+=======
+# ============================================
+# Tên của workflow — hiển thị trên GitHub
+# ============================================
+name: CI Pipeline
+
+# ============================================
+# TRIGGER — Khi nào pipeline được kích hoạt?
+# ============================================
+on:
+  push:
+    branches: [ main ]        # Push lên nhánh main
+  pull_request:
+    branches: [ main ]        # Tạo Pull Request vào main
+
+# ============================================
+# JOBS — Các công việc cần chạy
+# ============================================
+jobs:
+
+  # --------------------
+  # JOB 1: Lint code
+  # --------------------
+  lint:
+    name: Lint Code
+    runs-on: ubuntu-latest    # Chạy trên máy Ubuntu của GitHub
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint
+
+  # --------------------
+  # JOB 2: Test
+  # --------------------
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    needs: lint                # Chỉ chạy nếu job lint PASS
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+  # --------------------
+  # JOB 3: Build check
+  # --------------------
+  build:
+    name: Build Check
+    runs-on: ubuntu-latest
+    needs: test                # Chỉ chạy nếu job test PASS
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check app starts correctly
+        run: |
+          node -e "require('./src/app.js'); console.log('App loaded successfully!')"
+>>>>>>> 3ea4b813ad431c584461ffb1ba8085738de8fbed
